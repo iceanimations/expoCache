@@ -3,7 +3,8 @@ from PyQt4.QtCore import *
 from PyQt4 import uic
 import window
 import os
-osp = os.path
+import os.path as osp
+import logic
 
 form, base = uic.loadUiType(r'%s\ui\mainWindow.ui'%osp.dirname(osp.dirname(window.__file__)))
 class Window(form, base):
@@ -11,18 +12,68 @@ class Window(form, base):
         super(Window, self).__init__(parent)
         self.setupUi(self)
         
-        #set the connections between gui elements
+        # initialize the variables
+        self.initVariables()
         
+        #set the connections between gui elements
+        self.setConnections()
         
         self.show()
+        
+    def initVariables(self):
+        '''
+        initializes the variables
+        '''
+        self.camerasButtons = []
+        self.setsButtons = []
+        self.sourceFilePath = ''
+        self.targetFolderPath = ''
+        self.startEndFrame = False
+        self.startFrame = 1.00
+        self.endFrame = 10.00
+        self.keepKeysAtCurrentFrame = False
+        self.fps = 24
+
+    def setConniections(self):
+        '''
+        sets the connections between the ui elements
+        '''
+        self.selectAllButton.clicked.connect(self.selectAll)
+        self.sourceBox.returnPressed.connect(self.listObjects)
+        self.targetBox.returnPressed.connect(self.export)
+        self.sourceButton.clicked.connect(self.showFileDialog)
+        self.targetButton.clicked.connect(self.showFolderDialog)
+        self.exportButton.clicked.connect(self.export)
+        self.cancelButton.clicked.connect(self.closeWindow)
+        self.timeSliderButton.clicked.connect(self.switchStartEndBoxes)
+        self.startEndButton.clicked.connect(self.switchStartEndBoxes)
+        self.fpsBox.textChanged.connect(self.setFps)
+        self.startFrameBox.textChanged.connect(self.setStartEndFrame)
+        self.endFrameBox.textChanged.connect(self.setStartEndFrame)
+        
+    def setValidators(self):
+        '''
+        sets validators for input fields on the ui
+        '''
+        pass
+        
+    def setStartEndFrame(self):
+        self.startFrame = int(self.startFrameBox.text())
+        self.endFrame = int(self.endFrameBox.text())
+        
+    def setFps(self, text):
+        '''
+        set the self.fps
+        '''
+        self.fps = int(text)
     
     def showHideCams(self, flag = True):
         '''
         shows or hides the cams box and cams label
         when their is no depending on the value of the flag
         '''
-        self.camBox.hide(); self.camLabel.hide()
         if flag: self.camBox.show(); self.camLabel.show()
+        else: self.camBox.hide(); self.camLabel.hide()
         
     def listObjects(self):
         '''
@@ -79,6 +130,7 @@ class Window(form, base):
         flag = self.startEndButton.isChecked()
         self.startBox.setEnabled(flag)
         self.endBox.setEnabled(flag)
+        self.startEndFrame = flag
         
     def switchSelectAllButton(self):
         '''
@@ -104,3 +156,17 @@ class Window(form, base):
         shows the folder dialog to select a target folder
         '''
         pass
+    
+    def setTextForNoSetsLabel(self, text = ''):
+        '''
+        sets the text string for the label on the sets box
+        '''
+        if text:
+            self.noSetsLabel.setText(text)
+    
+    def showHideNoSetsLabel(self, flag = True):
+        '''
+        show or hides the label on the sets box
+        '''
+        if flag: self.noSetsLabel.show()
+        else: self.noSetsLabel.hide()
