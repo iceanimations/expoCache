@@ -50,7 +50,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>535</width>
+           <width>525</width>
            <height>96</height>
           </rect>
          </property>
@@ -61,6 +61,13 @@
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Set:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="selectAllButton">
+        <property name="text">
+         <string>Select All</string>
         </property>
        </widget>
       </item>
@@ -77,8 +84,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>535</width>
-           <height>196</height>
+           <width>525</width>
+           <height>172</height>
           </rect>
          </property>
         </widget>
@@ -144,13 +151,13 @@
      <widget class="QFrame" name="controlsBox">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>210</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>200</width>
+        <width>210</width>
         <height>16777215</height>
        </size>
       </property>
@@ -162,10 +169,10 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
-        <number>2</number>
+        <number>9</number>
        </property>
        <property name="rightMargin">
-        <number>2</number>
+        <number>9</number>
        </property>
        <item>
         <widget class="QPushButton" name="exportButton">
