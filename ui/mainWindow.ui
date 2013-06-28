@@ -54,6 +54,7 @@
            <height>96</height>
           </rect>
          </property>
+         <layout class="QVBoxLayout" name="camsLayout"/>
         </widget>
        </widget>
       </item>
@@ -88,7 +89,7 @@
            <height>172</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
+         <layout class="QVBoxLayout" name="setsLayout">
           <property name="topMargin">
            <number>2</number>
           </property>
@@ -98,7 +99,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Select the source file to list sets from the Scene</string>
+             <string>Select the source file to list sets</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -193,33 +194,6 @@
         <number>9</number>
        </property>
        <item>
-        <widget class="QPushButton" name="exportButton">
-         <property name="text">
-          <string>Expot</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="cancelButton">
-         <property name="text">
-          <string>Cancel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Settings</string>
@@ -258,22 +232,22 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QLineEdit" name="startFrameBox">
+             <widget class="QLineEdit" name="startBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>1.00</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="endFrameBox">
+             <widget class="QLineEdit" name="endBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>10.00</string>
+               <string>10</string>
               </property>
              </widget>
             </item>
@@ -290,16 +264,40 @@
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="label_5">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>FPS: </string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="fpsBox">
-              <property name="text">
-               <string>24</string>
+             <widget class="QComboBox" name="fpsBox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
+              <item>
+               <property name="text">
+                <string>24 fps (film)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>25 fps (PAL)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30 fps (ntsc)</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>
@@ -328,40 +326,16 @@
         </spacer>
        </item>
        <item>
-        <widget class="QComboBox" name="removeBox">
-         <item>
-          <property name="text">
-           <string>Sets</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>All</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Selected</string>
-          </property>
-         </item>
+        <widget class="QPushButton" name="exportButton">
+         <property name="text">
+          <string>Expot</string>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="removeButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
+        <widget class="QPushButton" name="cancelButton">
          <property name="text">
-          <string>Remove</string>
+          <string>Close</string>
          </property>
         </widget>
        </item>
@@ -386,11 +360,7 @@
   <tabstop>camBox</tabstop>
   <tabstop>setsBox</tabstop>
   <tabstop>sourceBox</tabstop>
-  <tabstop>removeBox</tabstop>
-  <tabstop>removeButton</tabstop>
   <tabstop>targetButton</tabstop>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>exportButton</tabstop>
   <tabstop>sourceButton</tabstop>
   <tabstop>targetBox</tabstop>
  </tabstops>
