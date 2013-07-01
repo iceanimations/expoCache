@@ -10,10 +10,10 @@ class Window(form, base):
         super(Window, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle('expoCache')
-        icon = QIcon(QPixmap(r'%s\icons\ice.png'%logic.dirname(logic.dirname(window.__file__))))
+        icon = QIcon(QPixmap(r'%s\icons\ec.png'%logic.dirname(logic.dirname(window.__file__))))
+        self.createSystemTrayIcon()
         self.setWindowIcon(icon)
-        #self.camBox.hide()
-        #self.camLabel.hide()
+        self.showCams(False)
         # initialize the variables
         self.initVariables()
         # set the connections between gui elements
@@ -59,6 +59,14 @@ class Window(form, base):
         self.startBox.textChanged.connect(self.setStartEndFrame)
         self.endBox.textChanged.connect(self.setStartEndFrame)
         self.keysFrameButton.clicked.connect(self.setKeepkeysAtCurrentFrames)
+    
+    def createSystemTrayIcon(self):
+        self.trayIcon = QSystemTrayIcon(self)
+        self.trayIcon.show()
+        self.trayIcon.setIcon(QIcon(r'%s\icons\ec.png'%logic.dirname(logic.dirname(window.__file__))))
+        self.trayIcon.setToolTip('expoCache')
+        #self.trayIcon.setContextMenu()
+        
         
     def setSourcePath(self):
         '''
@@ -125,7 +133,7 @@ class Window(form, base):
         text = str(self.fpsBox.currentText())
         self.fps = self.fpsMapping[text]
     
-    def showHideCams(self, flag = True):
+    def showCams(self, flag = True):
         '''
         shows or hides the cams box and cams label
         when their is no depending on the value of the flag
@@ -137,6 +145,16 @@ class Window(form, base):
         '''
         calls the openScene from the logic module
         '''
+        # delete if the buttons are already there
+        if self.camerasButtons:
+            for cam in self.camerasButtons:
+                cam.deleteLater()
+            self.camerasButtons[:] = []
+        if self.setsButtons:
+            for _set in self.setsButtons:
+                _set.deleteLater()
+            self.setsButtons[:] = []
+        self.camera = None
         self.setTextForNoSetsLabel('Please wait...')
         logic.openScene(self.sourceFilePath)
         self.listObjects()
@@ -145,32 +163,22 @@ class Window(form, base):
         '''
         calls the list cams and list sets
         '''
-        # delete if the buttons are already there
-        if self.camerasButtons:
-            for cam in self.camerasButtons:
-                cam.deleteLater()
-            self.camerasButtons = []
-        if self.setsButtons:
-            for _set in self.setsButtons:
-                _set.deleteLater()
-            self.setsButtons = []
-        self.camera = None
         # list the cams if they are more than one
-        self.showHideNoSetsLabel(False)
+        self.showNoSetsLabel(False)
         cams = logic.objects('camera')
         if len(cams) > 1:
-            self.showHideCams()
+            self.showCams()
             self.listCams([str(cam) for cam in cams])
         else:
             self.camera = cams[0] if len(cams) == 1 else None
-            self.showHideCams(False)
+            self.showCams(False)
         # list sets
         _sets = logic.objects('objectSet')
         if _sets:
-            self.showHideNoSetsLabel(False)
+            self.showNoSetsLabel(False)
             self.listSets(_sets)
         else:
-            self.showHideNoSetsLabel()
+            self.showNoSetsLabel()
             self.setTextForNoSetsLabel('No set found...')
         if not cams:
             self.msgBox(msg = 'No camera found in the file')
@@ -196,12 +204,29 @@ class Window(form, base):
             self.setsLayout.addWidget(chkBox)
             self.setsButtons.append(chkBox)
             chkBox.clicked.connect(self.switchSelectAllButton)
+        self.trayIcon.showMessage('expoCache Objects ready',
+                                  'expoCahe is done with the fetching and listing of objects',
+                                  QSystemTrayIcon.Information, 5000)
+            
+    def selectionOnWindow(self):
+        '''
+        returns True if the user selects an
+        object on the window else False
+        '''
+        for btn in self.setsButtons + self.camerasButtons:
+            if btn.isChecked():
+                return True
+        return False
 
     def export(self):
         '''
         exports the caches of the selected sets
         '''
         # set the current unit
+        if not self.selectionOnWindow():
+            self.msgBox(msg = 'System can not find any selection on the window',
+                        icon = QMessageBox.Ok)
+            return
         logic.setCurrentUnit(self.fps, self.keepKeysAtCurrentFrame)
         # set the export settings
         settings = {}
@@ -304,7 +329,7 @@ class Window(form, base):
             self.noSetsLabel.setText(text)
             self.noSetsLabel.repaint(1,1,1,1)
     
-    def showHideNoSetsLabel(self, flag = True):
+    def showNoSetsLabel(self, flag = True):
         '''
         show or hides the label on the sets box
         '''

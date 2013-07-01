@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>496</height>
+    <width>741</width>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>525</width>
+           <width>501</width>
            <height>96</height>
           </rect>
          </property>
@@ -85,8 +85,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>525</width>
-           <height>172</height>
+           <width>501</width>
+           <height>118</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="setsLayout">
@@ -349,7 +349,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>765</width>
+     <width>741</width>
      <height>22</height>
     </rect>
    </property>
