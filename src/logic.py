@@ -15,7 +15,7 @@ def objects(typ):
     '''
     returns the objects of the specified type from the opened maya scene
     '''
-    defaultSets = ['defaultLightSet', 'defaultObjectSet'
+    defaultSets = ['defaultLightSet', 'defaultObjectSet',
                    'front', 'top', 'side', 'persp']
     objectSets = []
     objects = pc.ls(type = typ)
@@ -26,9 +26,18 @@ def objects(typ):
                 objectSets.append(str(obj))
     else:
         for obj in objects:
-            if type(obj) == pc.nt.ObjectSet and str(obj) not in defaultSets:
-                obj = str(obj)
-                objectSets.append(obj)
+            try:
+                if type(obj) == pc.nt.ObjectSet and str(obj) not in defaultSets:
+                    transform = obj.members()[0]
+                    if type(transform) == pc.nt.Transform:
+                        shape = transform.getShape()
+                        if type(shape) == pc.nt.Mesh:
+                            obj = str(obj)
+                            objectSets.append(obj)
+            except IndexError:
+                pass
+            except pc.general.MayaAttributeError:
+                pass
             
     return objectSets
 

@@ -22,7 +22,7 @@ class Window(form, base):
         logic.doCreateGeometryCache2()
         self.callInitialFunctions()
         self.show()
-        
+
     def initVariables(self):
         '''
         initializes the variables
@@ -70,10 +70,11 @@ class Window(form, base):
             self.sourcePath = ''
             if path and logic.exists(path):
                 self.sourceFilePath = path
-            else: self.msgBox(msg = 'The system could not find the path specified\n'+
+            else:
+                self.msgBox(msg = 'The system could not find the path specified\n'+
                               path, icon = QMessageBox.Warning)
-            if self.sourceFilePath:
-                self.openScene()
+                return
+            self.openScene()
 
     def setTargetPath(self):
         '''
@@ -84,10 +85,11 @@ class Window(form, base):
         path = path.strip("\"")
         if path and logic.exists(path):
             self.targetFolderPath = path
-        else: self.msgBox(msg = 'The system could not find the path specified\n'+
+        else:
+            self.msgBox(msg = 'The system could not find the path specified\n'+
                           path, icon = QMessageBox.Warning)
-        if self.targetFolderPath:
-            self.export()
+            return
+        self.export()
 
     def callInitialFunctions(self):
         '''
@@ -179,7 +181,7 @@ class Window(form, base):
         lists the cameras on the ui
         '''
         for cam in cams:
-            chkBox = QRadioButton(logic.purgeChar(cam, replace = '_'), self)
+            chkBox = QCheckBox(logic.purgeChar(cam, replace = '_'), self)
             chkBox.setObjectName(cam)
             self.camsLayout.addWidget(chkBox)
             self.camerasButtons.append(chkBox)
@@ -194,7 +196,7 @@ class Window(form, base):
             self.setsLayout.addWidget(chkBox)
             self.setsButtons.append(chkBox)
             chkBox.clicked.connect(self.switchSelectAllButton)
-    
+
     def export(self):
         '''
         exports the caches of the selected sets
@@ -223,19 +225,20 @@ class Window(form, base):
         #export cams
         targetPath = ''
         if self.camerasButtons:
-            #cams = []
+            cams = []
             for cam in self.camerasButtons:
                 if cam.isChecked():
-                    self.camera = str(cam.objectName())
-                    break
-                    #cams.append(logic.pyNode(str(cam.objectName())))
-            #logic.select(cams)
-            #targetPath = logic.join(self.targetFolderPath, 'camera.ma')
-            #if cams:
-            #logic.exportSelection(targetPath)
+                    cams.append(logic.pyNode(str(cam.objectName())))
+            if cams:
+                for cam in cams:
+                    targetPath = logic.join(self.targetFolderPath,
+                                            logic.purgeChar(str(cam),
+                                                            replace = '_') + '.ma')
+                    logic.select([cam])
+                    logic.exportSelection(targetPath)
         if self.camera:
-            logic.select(logic.pyNode(self.camera))
             targetPath = logic.join(self.targetFolderPath, logic.purgeChar(self.camera))
+            logic.select([logic.pyNode(self.camera)])
             logic.exportSelection(targetPath)
         logic.gotoPath(self.targetFolderPath)
 
