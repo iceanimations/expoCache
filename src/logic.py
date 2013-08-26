@@ -2,6 +2,11 @@ import os
 import re
 import subprocess
 import os.path as osp
+import site
+site.addsitedir(r'R:\Pipe_Repo\Users\Qurban\mayaize')
+import mayaize2011
+import mayaize2012
+import mayaize2013
 import pymel.core as pc
 
 

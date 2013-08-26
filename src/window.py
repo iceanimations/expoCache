@@ -1,3 +1,5 @@
+import site
+site.addsitedir(r'R:\Python_Scripts')
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4 import uic
@@ -11,8 +13,8 @@ class Window(form, base):
         self.setupUi(self)
         self.setWindowTitle('expoCache')
         icon = QIcon(QPixmap(r'%s\icons\ec.png'%logic.dirname(logic.dirname(window.__file__))))
-        self.createSystemTrayIcon()
         self.setWindowIcon(icon)
+        self.createSystemTrayIcon()
         self.showCams(False)
         # initialize the variables
         self.initVariables()
@@ -62,9 +64,9 @@ class Window(form, base):
     
     def createSystemTrayIcon(self):
         self.trayIcon = QSystemTrayIcon(self)
-        self.trayIcon.show()
         self.trayIcon.setIcon(QIcon(r'%s\icons\ec.png'%logic.dirname(logic.dirname(window.__file__))))
         self.trayIcon.setToolTip('expoCache')
+        self.trayIcon.show()
         #self.trayIcon.setContextMenu()
         
         
@@ -326,6 +328,7 @@ class Window(form, base):
         sets the text string for the label on the sets box
         '''
         if text:
+            self.noSetsLabel.show()
             self.noSetsLabel.setText(text)
             self.noSetsLabel.repaint(1,1,1,1)
     
